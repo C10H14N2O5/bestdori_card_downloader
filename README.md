@@ -165,7 +165,7 @@ skills/bangdream-card-draw/
 
 ## 开源协议
 
-本项目使用 WTFPL v2。简单说，就是你想怎么用就怎么用；完整条款见 [LICENSE](LICENSE)。
+本项目使用 WTFPL v2。简单来说，就是你想怎么用就怎么用；完整条款见 [LICENSE](LICENSE)。
 
 ## ~~肯德基疯狂星期四友情条款~~
 
