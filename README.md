@@ -118,6 +118,16 @@ python bestdori_card_downloader.py -c 沙绫 -r 45 --no-dedup
 
 当前版本暂不提供交互式修改输出目录的功能。如果需要更改保存位置，可以直接修改脚本顶部的 `OUTPUT_DIR` 配置。
 
+## Skill 版本
+
+仓库中也包含一个面向智能体调用的 skill 版本，位于：
+
+```text
+skills/bangdream-card-draw/
+```
+
+该目录包含 skill 描述、使用说明和一份自包含的脚本副本，方便在支持 skill 的智能体环境中直接安装或引用。根目录脚本和 skill 内脚本应保持同步。
+
 ## 角色范围
 
 交互模式下，脚本主要展示 `characterId` 为 `1-40` 的 40 名乐队成员，对应：
@@ -152,3 +162,7 @@ python bestdori_card_downloader.py -c 沙绫 -r 45 --no-dedup
 本项目不是 BanG Dream!、Craft Egg、Bushiroad 或 Bestdori 的官方项目，也不与上述实体存在关联。
 
 脚本下载的卡面图片及相关角色、作品名称的版权归其各自权利方所有。本项目仅提供基于公开接口的个人使用脚本，请勿将下载内容用于违反相关权利方条款或当地法律法规的用途。
+
+## 开源协议
+
+本项目使用 WTFPL v2。简单说，就是你想怎么用就怎么用；完整条款见 [LICENSE](LICENSE)。

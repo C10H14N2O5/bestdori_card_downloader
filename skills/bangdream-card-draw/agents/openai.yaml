@@ -1,0 +1,4 @@
+interface:
+  display_name: "BangDream Card Draw"
+  short_description: "Draw and download BanG Dream cards with Bestdori"
+  default_prompt: "Use $bangdream-card-draw to draw and download a random BanG Dream card."
