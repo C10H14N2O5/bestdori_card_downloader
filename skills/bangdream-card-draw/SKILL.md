@@ -24,7 +24,7 @@ python -m pip install bestdori-api
 
 ## Common Commands
 
-Draw one random 4-star or 5-star card from the full card pool:
+Draw one random 3-star, 4-star, or 5-star card from the full card pool:
 
 ```powershell
 $env:PYTHONIOENCODING='utf-8'
@@ -42,7 +42,7 @@ Draw by character ID and rarity:
 
 ```powershell
 $env:PYTHONIOENCODING='utf-8'
-python scripts/bestdori_card_downloader.py -c 4 -r 45
+python scripts/bestdori_card_downloader.py -c 4 -r 345
 ```
 
 Draw by fuzzy character name and rarity:
@@ -55,8 +55,8 @@ python scripts/bestdori_card_downloader.py -c "沙绫" -r 5
 ## Behavior
 
 - `--character` / `-c` accepts a character ID or fuzzy character name.
-- `--rarity` / `-r` accepts `4`, `5`, or `45`; default is `45`.
-- `--random` ignores character filtering and draws from all 4-star and 5-star cards.
+- `--rarity` / `-r` accepts digit combinations like `345` (all), `34` (3+4), `45` (4+5), `35` (3+5), or single digits `3`, `4`, `5`; default is `345`.
+- `--random` ignores character filtering and draws from all 3-star, 4-star, and 5-star cards.
 - `--no-dedup` ignores the 14-day deduplication record and does not record the draw.
 - With no CLI arguments, the script enters the original interactive menu: `1` filtered random, `2` pure random, `3` refresh character cache, `0` exit.
 
