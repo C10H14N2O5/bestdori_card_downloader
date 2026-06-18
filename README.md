@@ -56,14 +56,20 @@ python bestdori_card_downloader.py
 筛选后随机模式会继续提示：
 
 - 角色序号：从脚本列出的角色列表中选择。
-- 星级范围：输入范围如 `3-5`（三星到五星）、`4-5`（四星到五星）或单个数字 `3`、`4`、`5`。回车默认为 `3-5`。
+- 星级：输入数字组合如 `345`（全选）、`34`（三星+四星）、`45`（四星+五星）、`35`（三星+五星），或单个数字 `3`、`4`、`5`。空格可选（如 `3 4`），回车默认为 `345`。
 
 ### CLI 快速模式
 
 按角色和星级范围抽取：
 
 ```bash
-python bestdori_card_downloader.py -c 沙绫 -r 3-5
+python bestdori_card_downloader.py -c 沙绫 -r 345
+```
+
+只要三星+四星：
+
+```bash
+python bestdori_card_downloader.py -c 沙绫 -r 34
 ```
 
 只抽五星：
@@ -81,7 +87,7 @@ python bestdori_card_downloader.py -c 纱夜 -r 3
 使用角色 ID：
 
 ```bash
-python bestdori_card_downloader.py -c 4 -r 3-5
+python bestdori_card_downloader.py -c 4 -r 345
 ```
 
 不限角色纯随机：
@@ -93,7 +99,7 @@ python bestdori_card_downloader.py --random
 忽略 14 天去重记录：
 
 ```bash
-python bestdori_card_downloader.py -c 沙绫 -r 3-5 --no-dedup
+python bestdori_card_downloader.py -c 沙绫 -r 345 --no-dedup
 ```
 
 ## 参数说明
@@ -101,7 +107,7 @@ python bestdori_card_downloader.py -c 沙绫 -r 3-5 --no-dedup
 | 参数 | 简写 | 说明 |
 | --- | --- | --- |
 | `--character` | `-c` | 角色名称或角色 ID。名称支持模糊匹配。 |
-| `--rarity` | `-r` | 星级范围筛选，支持范围格式如 `3-5`、`4-5`，或单个数字 `3`、`4`、`5`，默认 `3-5`。 |
+| `--rarity` | `-r` | 星级组合筛选，支持数字拼接如 `345`、`34`、`45`、`35`，或单个数字 `3`、`4`、`5`，默认 `345`。 |
 | `--random` |  | 纯随机模式，从全部三星、四星、五星卡池中抽取。 |
 | `--no-dedup` |  | 忽略近期去重记录。 |
 

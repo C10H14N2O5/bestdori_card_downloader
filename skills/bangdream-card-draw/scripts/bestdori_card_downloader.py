@@ -217,41 +217,33 @@ def download_card_image(card: dict, char_map: dict) -> Path | None:
 
 # ============ 抽取逻辑 ============
 
-def parse_rarity_range(input_str: str):
-    """解析星级范围输入，如 '3-5'、'4-5'、'3' → (min, max, label)，非法输入返回 None"""
-    input_str = input_str.strip()
-    if '-' in input_str:
-        parts = input_str.split('-')
-        if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
-            rmin = int(parts[0])
-            rmax = int(parts[1])
-            if 1 <= rmin <= rmax <= 5:
-                stars = {3: '三星', 4: '四星', 5: '五星'}
-                if rmin == rmax:
-                    label = stars.get(rmin, f'{rmin}星')
-                else:
-                    label = '~'.join(stars.get(r, f'{r}星') for r in range(rmin, rmax + 1))
-                return (rmin, rmax, label)
-    elif input_str.isdigit():
-        r = int(input_str)
-        if 1 <= r <= 5:
-            stars = {3: '三星', 4: '四星', 5: '五星'}
-            label = stars.get(r, f'{r}星')
-            return (r, r, label)
-    return None
+def parse_rarity_input(input_str: str):
+    """解析星级输入: '34'→{3,4}, '345'→{3,4,5}, '3'→{3}, '3 4'→{3,4}
+    返回 (rarities: set, label: str)，非法输入返回 None"""
+    input_str = input_str.strip().replace(' ', '')
+    if not input_str:
+        return None
+    rarities = set()
+    for ch in input_str:
+        if ch not in '345':
+            return None
+        rarities.add(int(ch))
+    if not rarities:
+        return None
+    stars = {3: '三星', 4: '四星', 5: '五星'}
+    label = '+'.join(stars[r] for r in sorted(rarities))
+    return (rarities, label)
 
 
 def build_available_pool(all_cards: list, dedup: dict, char_id: int | None,
-                         rarity_min: int | None = None, rarity_max: int | None = None):
+                         rarities: set | None = None):
     """构建可用卡池（过滤去重后的），返回候选列表"""
     # 筛选
     pool = all_cards
     if char_id is not None:
         pool = [c for c in pool if c['characterId'] == char_id]
-    if rarity_min is not None or rarity_max is not None:
-        rmin = rarity_min if rarity_min is not None else 0
-        rmax = rarity_max if rarity_max is not None else 99
-        pool = [c for c in pool if rmin <= c['rarity'] <= rmax]
+    if rarities is not None:
+        pool = [c for c in pool if c['rarity'] in rarities]
 
     if not pool:
         return []
@@ -305,20 +297,20 @@ def draw_filtered(char_map: dict, all_cards: list, dedup: dict):
             print("\n已取消")
             return
 
-    # 选择星级范围
+    # 选择星级
     while True:
-        choice = input("请选择星级范围 (如: 3-5、4-5、3、4、5，回车默认3-5): ").strip()
+        choice = input("请选择星级 (34=三星+四星, 345=全选, 45=四星+五星, 3/4/5=单星，回车默认345): ").strip()
         if choice == '':
-            choice = '3-5'  # 默认全范围
-        parsed = parse_rarity_range(choice)
+            choice = '345'
+        parsed = parse_rarity_input(choice)
         if parsed:
-            rarity_min, rarity_max, rarity_label = parsed
+            rarities, rarity_label = parsed
             break
         else:
-            print("  请输入有效范围，如 3-5、4-5、3、4、5")
+            print("  请输入3/4/5的组合，如 34、345、45、3、4、5")
 
     # 构建卡池
-    pool = build_available_pool(all_cards, dedup, selected_char_id, rarity_min, rarity_max)
+    pool = build_available_pool(all_cards, dedup, selected_char_id, rarities)
     if not pool:
         print(f"\n[错误] 没有找到符合条件的卡牌（{selected_char_name} {rarity_label}）")
         return
@@ -423,13 +415,13 @@ def fast_mode(args):
             sys.exit(1)
 
         char_id, char_name = match
-        parsed = parse_rarity_range(args.rarity)
+        parsed = parse_rarity_input(args.rarity)
         if not parsed:
-            print(f"[错误] 无效的星级范围: {args.rarity}")
+            print(f"[错误] 无效的星级输入: {args.rarity}（请输入3/4/5的组合，如 34、345、45）")
             sys.exit(1)
-        rarity_min, rarity_max, rarity_label = parsed
+        rarities, rarity_label = parsed
 
-        pool = build_available_pool(all_cards, dedup, char_id, rarity_min, rarity_max)
+        pool = build_available_pool(all_cards, dedup, char_id, rarities)
         if not pool:
             print(f"[错误] 没有找到符合条件的卡牌（{char_name} {rarity_label}）")
             sys.exit(1)
@@ -457,8 +449,8 @@ def main():
     # ---- 命令行参数解析 (快速模式) ----
     parser = argparse.ArgumentParser(description='Bang Dream! 卡面随机抽取工具')
     parser.add_argument('-c', '--character', type=str, help='角色名称或ID，支持模糊匹配 (如: saya, 山吹沙绫, 4)')
-    parser.add_argument('-r', '--rarity', type=str, default='3-5',
-                        help='星级范围，如: 3-5、4-5、3、4、5 (默认: 3-5)')
+    parser.add_argument('-r', '--rarity', type=str, default='345',
+                        help='星级组合，如: 34(三星+四星)、345(全选)、45(四星+五星)、3、4、5 (默认: 345)')
     parser.add_argument('--random', action='store_true', help='纯随机模式 (全三~五星卡池)')
     parser.add_argument('--no-dedup', action='store_true', help='忽略去重记录')
     args_cli = parser.parse_args()
