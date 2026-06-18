@@ -1,6 +1,6 @@
 # Bestdori Card Downloader
 
-一个基于 Bestdori API 的 Bang Dream! 卡面随机抽取与下载脚本。它会从四星、五星卡池中随机抽取卡面，并自动下载图片到本地。
+一个基于 Bestdori API 的 Bang Dream! 卡面随机抽取与下载脚本。它会从三星、四星、五星卡池中随机抽取卡面，并自动下载图片到本地。
 
 这是一个个人向、非官方的小工具，主要用于个人学习、收藏和娱乐用途。项目开发过程中使用了 AI 辅助生成代码，作者负责需求设计、测试和调整。
 
@@ -11,8 +11,8 @@
 
 ## 功能
 
-- 按角色和星级筛选后随机抽取卡面。
-- 从全部四星、五星卡池中纯随机抽取。
+- 按角色和星级范围筛选后随机抽取卡面。
+- 从全部三星、四星、五星卡池中纯随机抽取。
 - 支持角色名称模糊匹配，也支持直接使用角色 ID。
 - 默认启用 14 天去重，避免短期内重复抽到同一卡面。
 - 自动缓存角色数据，减少重复请求。
@@ -56,14 +56,20 @@ python bestdori_card_downloader.py
 筛选后随机模式会继续提示：
 
 - 角色序号：从脚本列出的角色列表中选择。
-- 星级：输入 `4`、`5` 或 `45`，其中 `45` 表示四星和五星都可以。
+- 星级：输入数字组合如 `345`（全选）、`34`（三星+四星）、`45`（四星+五星）、`35`（三星+五星），或单个数字 `3`、`4`、`5`。空格可选（如 `3 4`），回车默认为 `345`。
 
 ### CLI 快速模式
 
-按角色和星级抽取：
+按角色和星级范围抽取：
 
 ```bash
-python bestdori_card_downloader.py -c 沙绫 -r 45
+python bestdori_card_downloader.py -c 沙绫 -r 345
+```
+
+只要三星+四星：
+
+```bash
+python bestdori_card_downloader.py -c 沙绫 -r 34
 ```
 
 只抽五星：
@@ -72,10 +78,16 @@ python bestdori_card_downloader.py -c 沙绫 -r 45
 python bestdori_card_downloader.py -c 纱夜 -r 5
 ```
 
+只抽三星：
+
+```bash
+python bestdori_card_downloader.py -c 纱夜 -r 3
+```
+
 使用角色 ID：
 
 ```bash
-python bestdori_card_downloader.py -c 4 -r 45
+python bestdori_card_downloader.py -c 4 -r 345
 ```
 
 不限角色纯随机：
@@ -87,7 +99,7 @@ python bestdori_card_downloader.py --random
 忽略 14 天去重记录：
 
 ```bash
-python bestdori_card_downloader.py -c 沙绫 -r 45 --no-dedup
+python bestdori_card_downloader.py -c 沙绫 -r 345 --no-dedup
 ```
 
 ## 参数说明
@@ -95,8 +107,8 @@ python bestdori_card_downloader.py -c 沙绫 -r 45 --no-dedup
 | 参数 | 简写 | 说明 |
 | --- | --- | --- |
 | `--character` | `-c` | 角色名称或角色 ID。名称支持模糊匹配。 |
-| `--rarity` | `-r` | 星级筛选，可选 `4`、`5`、`45`，默认 `45`。 |
-| `--random` |  | 纯随机模式，从全部四星、五星卡池中抽取。 |
+| `--rarity` | `-r` | 星级组合筛选，支持数字拼接如 `345`、`34`、`45`、`35`，或单个数字 `3`、`4`、`5`，默认 `345`。 |
+| `--random` |  | 纯随机模式，从全部三星、四星、五星卡池中抽取。 |
 | `--no-dedup` |  | 忽略近期去重记录。 |
 
 ## 输出位置
