@@ -7,7 +7,7 @@ This skill bundles `scripts/bestdori_card_downloader.py`, a frozen Python CLI fo
 | Mode | How to run | What it does |
 | --- | --- | --- |
 | Filtered random | `-c <character> -r <rarity>` | Choose a character and rarity, then draw a matching card. |
-| Pure random | `--random` | Draw from all 4-star and 5-star cards without character filtering. |
+| Pure random | `--random` | Draw from all 3-star, 4-star, and 5-star cards without character filtering. |
 | Interactive | no arguments | Show a numeric menu for filtered draw, pure random, cache refresh, or exit. |
 
 ## CLI Parameters
@@ -15,8 +15,8 @@ This skill bundles `scripts/bestdori_card_downloader.py`, a frozen Python CLI fo
 | Parameter | Meaning | Examples |
 | --- | --- | --- |
 | `--character`, `-c` | Character ID or fuzzy character name. | `-c 4`, `-c "沙绫"`, `-c "纱夜"` |
-| `--rarity`, `-r` | Rarity filter: `4`, `5`, or `45`; default is `45`. | `-r 5`, `-r 45` |
-| `--random` | Pure random mode across all 4-star and 5-star cards. | `--random` |
+| `--rarity`, `-r` | Rarity filter: digit combinations like `345`, `34`, `45`, `35`, or single digits `3`, `4`, `5`; default is `345`. | `-r 5`, `-r 345` |
+| `--random` | Pure random mode across all 3-star, 4-star, and 5-star cards. | `--random` |
 | `--no-dedup` | Ignore the 14-day dedup record and do not record the draw. | `--random --no-dedup` |
 
 ## Recommended Agent Invocation
@@ -34,7 +34,7 @@ For a specific character:
 ```powershell
 Set-Location <skill-directory>
 $env:PYTHONIOENCODING='utf-8'
-python scripts/bestdori_card_downloader.py -c 4 -r 45
+python scripts/bestdori_card_downloader.py -c 4 -r 345
 ```
 
 ## Interactive Menu
@@ -48,7 +48,7 @@ python scripts/bestdori_card_downloader.py
 Menu choices:
 
 - `1`: filtered random draw by character and rarity.
-- `2`: pure random draw from all 4-star and 5-star cards.
+- `2`: pure random draw from all 3-star, 4-star, and 5-star cards.
 - `3`: refresh the Bestdori character cache.
 - `0`: exit.
 
