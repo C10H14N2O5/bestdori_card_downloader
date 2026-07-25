@@ -1,3 +1,4 @@
 bestdori-api
 aiohttp
 httpx
+pyinstaller
